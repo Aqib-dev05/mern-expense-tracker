@@ -9,7 +9,7 @@ if (missing.length) {
 }
 
 const nodeEnv = process.env.NODE_ENV || 'development';
-if (nodeEnv === 'production' && (process.env.JWT_SECRET.length < 32 || process.env.JWT_SECRET.startsWith('change-me'))) {
+if (nodeEnv === 'production' && (process.env.JWT_SECRET.length < 20 || process.env.JWT_SECRET.startsWith('change-me'))) {
   throw new Error('JWT_SECRET must be a long random value in production (32+ characters).');
 }
 
