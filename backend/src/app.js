@@ -26,6 +26,10 @@ app.use(
 app.use(express.json({ limit: '100kb' }));
 if (!env.isProd) app.use(morgan('dev'));
 
+app.get("/health",(req,res)=>{
+  res.status(200).json({status:"ok"})
+})
+
 app.use('/api', apiLimiter, routes);
 app.use(notFound);
 app.use(errorHandler);
