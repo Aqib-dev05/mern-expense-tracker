@@ -21,7 +21,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-const AUTH_PATHS = ['/auth/login', '/auth/register'];
+const AUTH_PATHS = ['/auth/login', '/auth/register', '/auth/forgot-password', '/auth/reset-password'];
 
 api.interceptors.response.use(
   (res) => res,

@@ -15,3 +15,5 @@ export const logout = async () => {
 };
 export const getMe = async () => (await api.get('/auth/me')).data.user;
 export const updateProfile = async (payload) => (await api.patch('/auth/me', payload)).data.user;
+export const forgotPassword = async (email) => (await api.post('/auth/forgot-password', { email })).data;
+export const resetPassword = async (payload) => (await api.post('/auth/reset-password', payload)).data;

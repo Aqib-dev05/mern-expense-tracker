@@ -49,6 +49,9 @@ export default function Login() {
       )}
       <Input label="Email" type="email" autoComplete="email" leftIcon={Mail} placeholder="you@example.com" value={form.email} onChange={(e) => set('email', e.target.value)} error={errors.email} />
       <Input label="Password" type="password" autoComplete="current-password" leftIcon={Lock} placeholder="Your password" value={form.password} onChange={(e) => set('password', e.target.value)} error={errors.password} />
+      <div className="-mt-2 text-right">
+        <Link to="/forgot-password" className="text-sm font-semibold text-brand-600 hover:underline dark:text-brand-300">Forgot password?</Link>
+      </div>
       <Button type="submit" size="lg" className="w-full" loading={loading}>Log in</Button>
       <p className="text-center text-sm text-slate-500 dark:text-slate-400">
         New here? <Link to="/register" className="font-semibold text-brand-600 hover:underline dark:text-brand-300">Create an account</Link>
