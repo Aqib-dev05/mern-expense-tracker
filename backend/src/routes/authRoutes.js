@@ -47,15 +47,14 @@ const resetPasswordSchema = z.object({
   password: z.string().min(8, 'Password must be at least 8 characters').max(72, 'Password is too long'),
 });
 
-const SMTP_PORT = Number(process.env.SMTP_PORT) || 465;
-const mailConfigured = Boolean(process.env.SMTP_USER && process.env.SMTP_PASS);
+// Sends through Gmail with nodemailer (the `gmail` preset already knows the host and port).
+// Needs GMAIL_USER (the sender address) and GMAIL_APP_PASSWORD (a Google "App password", not the normal password).
+const mailConfigured = Boolean(process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD);
 let transporter;
 const getMailer = () =>
   (transporter ||= nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: SMTP_PORT,
-    secure: SMTP_PORT === 465,
-    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+    service: 'gmail',
+    auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_APP_PASSWORD },
   }));
 
 const hashOtp = (email, otp) => crypto.createHmac('sha256', env.jwtSecret).update(`${email}:${otp}`).digest('hex');
@@ -63,12 +62,12 @@ const escapeHtml = (s = '') => String(s).replace(/[&<>"']/g, (ch) => ({ '&': '&a
 
 async function sendResetEmail(user, otp) {
   if (!mailConfigured) {
-    // Local development without SMTP: print the code instead of emailing it.
+    // Local development without Gmail credentials: print the code instead of emailing it.
     if (!env.isProd) console.log(`[dev] password reset code for ${user.email}: ${otp}`);
     return;
   }
   await getMailer().sendMail({
-    from: process.env.MAIL_FROM || process.env.SMTP_USER,
+    from: `Ledgerly <${process.env.GMAIL_USER}>`,
     to: user.email,
     subject: 'Your password reset code',
     text: `Hi ${user.name},\n\nYour password reset code is ${otp}. It expires in 10 minutes.\n\nIf you did not request this, you can ignore this email.`,
